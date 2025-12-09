@@ -1,1 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site de Notificações</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+        button { padding: 10px 20px; font-size: 16px; margin: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Notificações para Pessoas</h1>
+    <button id="pedirPermissao">Ativar Notificações</button>
+    <button id="enviarNotificacao" disabled>Enviar Notificação</button>
 
+    <script>
+        const btnPermissao = document.getElementById('pedirPermissao');
+        const btnNotificacao = document.getElementById('enviarNotificacao');
+
+        btnPermissao.addEventListener('click', () => {
+            if (!("Notification" in window)) {
+                alert("Seu navegador não suporta notificações.");
+                return;
+            }
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    btnPermissao.textContent = "Ativado!";
+                    btnPermissao.disabled = true;
+                    btnNotificacao.disabled = false;
+                }
+            });
+        });
+
+        btnNotificacao.addEventListener('click', () => {
+            if (Notification.permission === "granted") {
+                const opcoes = {
+                    body: "Olá! Esta é uma notificação de teste.",
+                    icon: "https://via.placeholder.com/192x192/007bff/ffffff?text=🔔",
+                    tag: "teste-notificacao"
+                };
+                new Notification("Nova Mensagem!", opcoes);
+            }
+        });
+    </script>
+</body>
+</html>
